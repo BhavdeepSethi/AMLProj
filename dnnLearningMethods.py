@@ -596,8 +596,8 @@ if __name__ == "__main__":
 
     from sklearn import datasets, svm, naive_bayes
     from sklearn import cross_validation, preprocessing
-    DIGITS = False
-    FACES = False
+    DIGITS = True
+    FACES = True
     TWENTYNEWSGROUPS = True
     VERBOSE = True
     SCALE = True
@@ -639,78 +639,45 @@ if __name__ == "__main__":
             ax3 = plt.subplot(223)
             ax4 = plt.subplot(224)  # TODO updates of the weights
             
-            #for method in ['sag']:
-            
-            #for method in ['sgd', 'momentum', 'nag', 'adagrad', 'adadelta']:
-
             #epsVals = [1.E-2, 1.E-4, 1.E-6, 1.E-8]
             #muVals = [0.9, 0.99, 0.999]
             muVal = 0.9
             rhoVal = 0.999
             eps = 1.E-8
-            muVals = [0.0, 0.9, 0.99, 0.999]
-            #methods = ['momentum', 'momentum', 'momentum', 'momentum']
+            muVals = [0.0, 0.9, 0.99, 0.999]            
             methods = ['sgd', 'momentum', 'nag', 'adagrad', 'adadelta']
 
-            #for method, muVal in zip(methods, muVals):        
+            
             for method in methods:
                 print method    
-            #for method in ['momentum', 'nag']:
-                #lrLabel = str(muVal).split(".")[1]
-                #labelStr = "_"+str(muVal)#+"_"+str(eps)
                 labelStr = ""                
                 dnn = new_regNet_dnn(muVal, eps, rhoVal)
                 print dnn
                 print labelStr
                 dnn.fit(x_train, y_train, x_test=x_test, y_test=y_test, max_epochs=n_epochs, method=method, verbose=VERBOSE, plot=PLOT)                
                 print("score: %f" % (1. - numpy.mean(dnn._train_errors)))
-                #print method
-                #print numpy.log10(dnn._costs)
                 plt.figure(1)
                 ax1.plot(numpy.log10(dnn._costs), label=method+labelStr)
-                #ax2.plot(numpy.log10(dnn._train_errors), label=method)
-                #ax3.plot(numpy.log10(dnn._dev_errors), label=method)
-                #print "train: "
-                #print str(len(dnn._train_errors))
-                #print "test: "
-                #print str(len(dnn._test_errors))     
-                #~plt.figure(2)           
-                ax2.plot(dnn._train_errors, label=method+labelStr)
-                #~plt.figure(3)
-                ax3.plot(dnn._dev_errors, label=method+labelStr)
-                #plt.figure(2)
+                ax2.plot(dnn._train_errors, label=method+labelStr)                
+                ax3.plot(dnn._dev_errors, label=method+labelStr)                
                 ax4.plot(dnn._test_errors, label=method+labelStr)
                 #ax4.plot([test_error for _ in range(10)], label=method)
             plt.figure(1)
             ax1.set_xlabel('Epoch')
             ax1.set_ylabel('Cost (log10)')
             ax1.set_title('Cost(log10) vs Epoch')
-            #~plt.tight_layout()
-            #~plt.legend()            
-            #~plt.savefig(name+'_training_cost.png')
-            #~plt.figure(2)
             ax2.set_xlabel('Epoch')
             ax2.set_ylabel('Training Error')
             ax2.set_title('Training Error vs Epoch')
 
-            #~plt.legend()
-            #~plt.tight_layout()            
-            #~plt.savefig(name+'_training_error.png')
-            #~plt.figure(3)
             ax3.set_xlabel('Epoch')            
             ax3.set_ylabel('Validation Error')
             ax3.set_title('Validation Error vs Epoch')
-            #plt.legend(bbox_to_anchor=(1, 1), loc=2, borderaxespad=2)
-            #plt.legend()
-            #plt.tight_layout()            
-            #plt.savefig(name+'_train_cost_dev.png')
- 
-            #plt.figure(2)
             ax4.set_xlabel('Epoch')
             ax4.set_ylabel('Test Error')
             ax4.set_title('Test Error vs Epoch')
             plt.legend()
-            #plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+            
             plt.legend(loc='upper right', bbox_to_anchor=(1, 2.4), fontsize="small")
             plt.tight_layout()
             plt.savefig(name+'_graph.png')
